@@ -36,16 +36,17 @@
         
         $filePath = $args[0]
         
-        $fileContent = $filePath
+        # Read the content of the file 
+        $fileContent = Get-Content $filePath
 
-        $bytes = [System.Text.Encoding]::Unicode.GetBytes($fileContent)
+        $encoded = base64Encode $fileContent
 
-        $EncodedText =[Convert]::ToBase64String($bytes)
+            return $encoded
     }
 
 
-    #main "Secret text to test"
+    $test = main example.txt
 
-    $test = base64Encode "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at risus nec enim tincidunt accumsan nec ut mi. Suspendisse ut viverra velit. Donec vitae maximus augue. Donec iaculis tincidunt interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod ut ante eget laoreet. Suspendisse pellentesque tempor justo sed scelerisque. Suspendisse ut felis aliquet, condimentum elit eget, dictum nisl. Aliquam non nisl a tortor molestie condimentum. Sed a magna leo. "
+    #$test = base64Encode "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at risus nec enim tincidunt accumsan nec ut mi. Suspendisse ut viverra velit. Donec vitae maximus augue. Donec iaculis tincidunt interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod ut ante eget laoreet. Suspendisse pellentesque tempor justo sed scelerisque. Suspendisse ut felis aliquet, condimentum elit eget, dictum nisl. Aliquam non nisl a tortor molestie condimentum. Sed a magna leo. "
     $test
     base64Decode $test
