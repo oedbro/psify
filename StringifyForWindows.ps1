@@ -35,18 +35,30 @@
         }
         
         $filePath = $args[0]
-        
+        $fileName = [regex]::match($filePath, '([a-zA-Z.0-9]+)$').Groups[1].Value
         # Read the content of the file 
         $fileContent = Get-Content $filePath
 
         $encoded = base64Encode $fileContent
 
-            return $encoded
+        $newFilePath = $filePath + ".ps1"
+
+        # If the file exists remove it
+        if (Test-Path $newFilePath) 
+        {
+            Remove-Item $newFilePath
+        }
+
+        # Save the encoded file as a variable
+        $scriptContent = "`$bytes = `"$encoded""`n" 
+        $scriptContent += "`$DecodedText = [System.Text.Encoding]::Ascii.GetString([System.Convert]::FromBase64String(`$bytes))`n"
+        $scriptContent += "`$DecodedText | Out-File $fileName`n"
+        $scriptContent | Out-File $newFilePath
     }
 
 
-    $test = main example.txt
+    $test = main "./example.txt"
 
     #$test = base64Encode "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at risus nec enim tincidunt accumsan nec ut mi. Suspendisse ut viverra velit. Donec vitae maximus augue. Donec iaculis tincidunt interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod ut ante eget laoreet. Suspendisse pellentesque tempor justo sed scelerisque. Suspendisse ut felis aliquet, condimentum elit eget, dictum nisl. Aliquam non nisl a tortor molestie condimentum. Sed a magna leo. "
     $test
-    base64Decode $test
+    #base64Decode $test
