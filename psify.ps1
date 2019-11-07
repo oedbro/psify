@@ -27,9 +27,11 @@ function psify {
 
     # Save the encoded file as a variable
     $scriptContent = "`$b64 = ""$encoded""`n" 
+    # get the current path while decoding
+    $scriptContent += "`$path = pwd`n"
     # Add row to decode the file
     $scriptContent += "`$bytes = [System.Convert]::FromBase64String(`$b64)`n"
-    $scriptContent += "[io.file]::WriteAllBytes('$fileName', `$bytes)`n"
+    $scriptContent += "[io.file]::WriteAllBytes(`"`$path\$fileName`", `$bytes)`n"
     # Write the new script to a file 
     $scriptContent | Out-File $newFilePath
 }
